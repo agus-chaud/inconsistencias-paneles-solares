@@ -1,18 +1,18 @@
 # Análisis de anomalías en plantas solares fotovoltaicas
 
-Proyecto de análisis exploratorio de datos (EDA) orientado a investigar comportamientos anómalos en la generación eléctrica de dos plantas solares fotovoltaicas. El análisis utiliza mediciones de generación y sensores ambientales registradas cada 15 minutos durante 34 días. El objetivo es aportar evidencia para localizar si los problemas están relacionados con la captación solar, los datos, los inversores u otras etapas de conversión energética.
+Análisis exploratorio de datos (EDA) orientado a investigar comportamientos inusuales en la generación eléctrica de dos plantas solares fotovoltaicas. El análisis usa mediciones de generación y sensores ambientales registradas cada 15 minutos durante 34 días. 
 
 ## Resumen ejecutivo
 
-Una compañía de generación solar detectó comportamientos anómalos en dos plantas y solicitó analizar los datos antes de enviar un equipo de ingeniería. El proyecto integra datos de generación de inversores y datos meteorológicos, revisa su calidad temporal, prepara variables derivadas y compara el comportamiento de ambas plantas. Los análisis documentados indican que la captación solar no presenta anomalías significativas, mientras que aparecen episodios de indisponibilidad en la Planta 2 y pérdidas de registros que deben investigarse por equipo y fecha.
+Una compañía de generación solar detectó comportamientos inusuales en dos plantas y solicitó analizar los datos antes de enviar un equipo de mantenimiento. El proyecto integra datos de generación de inverters y datos meteorológicos, revisa su calidad temporal, prepara variables derivadas y compara el comportamiento de ambas plantas. Los análisis documentados indican que la captación solar no presenta anomalías significativas, mientras que aparecen episodios de indisponibilidad en la Planta 2 y pérdidas de registros que deben investigarse por equipo y fecha.
 
 ## Problema
 
-La generación de una planta solar depende de la irradiación, la temperatura, el estado de los paneles, la eficiencia de los inversores y la fiabilidad de los sensores y medidores. Los datos presentan tramos horarios faltantes y patrones diferentes entre plantas, lo que puede ocultar fallos o sesgar las comparaciones. Por eso es necesario distinguir entre un problema real de operación y un problema de medición o disponibilidad de datos.
+La generación de una planta solar depende de la irradiación (cantidad de sol), la temperatura, el estado de los paneles, la eficiencia de los inverters y la fiabilidad de los sensores y medidores. Los datos presentan tramos horarios faltantes y patrones diferentes entre plantas, lo que puede ocultar fallos o sesgar las comparaciones. Por eso es necesario distinguir entre un problema real de operación y un problema de medición o disponibilidad de datos.
 
 ## Objetivo
 
-Analizar los datos disponibles para identificar indicios que permitan localizar los problemas de producción en dos plantas solares. En particular, se busca comparar la captación solar, la generación DC y AC, el rendimiento de los inversores y la calidad temporal de las mediciones.
+Analizar los datos disponibles para identificar indicios que permitan localizar los problemas de producción en dos plantas solares. En particular, se busca comparar la captación solar, la generación DC y AC, el rendimiento de los inverters y la calidad temporal de las mediciones.
 
 ## Enfoque técnico
 
@@ -23,38 +23,38 @@ El flujo de trabajo del proyecto es:
 3. Revisar la cobertura temporal y la existencia de tramos de 15 minutos faltantes.
 4. Integrar los datos en un tablón analítico intermedio.
 5. Crear componentes de fecha y hora y preparar variables para el análisis.
-6. Calcular la eficiencia del inversor como `potencia_ac_kw / potencia_dc_kw * 100`, limitando los valores superiores al 100 %.
-7. Comparar las plantas mediante agregaciones, gráficos y análisis de generación por inversor.
+6. Calcular la eficiencia del inverter como `potencia_ac_kw / potencia_dc_kw * 100`, limitando los valores superiores al 100 %.
+7. Comparar las plantas mediante agregaciones, gráficos y análisis de generación por inverter.
 8. Documentar los hallazgos y las limitaciones de los datos.
-
-Las herramientas observadas en los notebooks son Python, pandas, NumPy, Matplotlib, Seaborn y pathlib. Los datos se almacenan y recuperan mediante archivos CSV y Pickle.
 
 ## Decisiones técnicas relevantes
 
 ### Mantener los huecos temporales
 
-Se decidió no regularizar automáticamente las series temporales. Los huecos pueden ser una señal del problema operativo que se intenta detectar, por lo que rellenarlos podría ocultar información relevante.
+Se decidió no regularizar automáticamente las series temporales. Los huecos pueden ser una señal del problema operativo que se intenta detectar, por lo que imputarlos podría ocultar información relevante.
 
-### Analizar las plantas y los inversores por separado
+### Analizar las plantas y los inverters por separado
 
-La Planta 1 presenta días con pérdidas de registros tanto en generación como en sensores, mientras que la Planta 2 presenta un período problemático en generación y cuatro inversores con pérdidas superiores al resto. Por este motivo, las conclusiones no deben basarse únicamente en promedios globales.
+La Planta 1 presenta días con pérdidas de registros tanto en generación como en sensores, mientras que la Planta 2 presenta un período problemático en generación y cuatro inverters con pérdidas superiores al resto. Por esto, las conclusiones no se basan únicamente en promedios globales.
 
 ### Corregir `potencia_dc_kw` de la Planta 1
 
-Durante la revisión de calidad se detectó un posible corrimiento decimal en `potencia_dc_kw` para la Planta 1. En el notebook de importación se divide ese campo por 10 para hacer comparables sus valores.
+Durante la revisión de calidad se detectó un posible corrimiento decimal (o datos guardados en otra unidad) en `potencia_dc_kw` para la Planta 1. Se divide ese campo por 10 para hacer comparables sus valores.
 
-### Crear la eficiencia del inversor
+### Crear la eficiencia del inverter
 
 La eficiencia se calcula relacionando la potencia AC con la potencia DC. Cuando la potencia DC no es positiva se usa un valor controlado y los resultados superiores al 100 % se limitan a 100 %, evitando ratios físicamente imposibles en el análisis exploratorio.
 
 ## Resultados principales
 
-- Los cuatro datasets cubren el período del 15/05/2020 al 17/06/2020, con una frecuencia esperada de 15 minutos.
-- La Planta 1 presenta problemas de registros en los días 20/05/2020, 21/05/2020 y 29/05/2020, tanto en generación como en sensores.
-- La generación de la Planta 2 presenta un período problemático entre el 20/05/2020 y el 29/05/2020.
-- En la Planta 2 se identifican cuatro inversores con una pérdida de datos superior al resto.
-- La captación solar no muestra problemas significativos: la irradiación y las temperaturas son comparables entre ambas plantas.
-- En la Planta 2 se observan intervalos con irradiación media o alta y potencia DC y AC cercana a cero. El patrón es compatible con indisponibilidad real de inversores o del sistema, aunque requiere confirmación operativa.
+| Area analizada | Principal hallazgo | Interpretación |
+|---|---|---|
+| Cobertura temporal | Los cuatro datasets cubren del 15/05/2020 al 17/06/2020 | Existe un periodo comun de análisis de 34 dias |
+| Calidad de datos en Planta 1 | Faltan registros los dias 20/05, 21/05 y 29/05 | El problema afecta tanto a generación como a sensores |
+| Calidad de datos en Planta 2 | La generación presenta problemas entre el 20/05 y el 29/05 | Es necesario revisar ese periodo con más detalle |
+| Inversores de Planta 2 | Cuatro inversores pierden más datos que el resto | Podrian existir fallos específicos de esos equipos |
+| Captación solar | No se observan anomalías significativas | La irradiación y las temperaturas son comparables entre plantas |
+| Generación en Planta 2 | Hay irradiación media o alta con potencia DC y AC cercana a cero | El patron es compatible con una indisponibilidad real, pendiente de confirmacion operativa |
 
 ## Estructura del proyecto
 
@@ -88,7 +88,7 @@ La eficiencia se calcula relacionando la potencia AC con la potencia DC. Cuando 
 - Jupyter Notebook o JupyterLab.
 - Las librerías utilizadas por los notebooks: `pandas`, `numpy`, `matplotlib` y `seaborn`.
 
-El repositorio no incluye `requirements.txt` ni `environment.yml`, por lo que las versiones exactas de las dependencias no están especificadas.
+
 
 ### Instalación del entorno
 
@@ -133,6 +133,6 @@ Los resultados intermedios se guardan en `Datos/intermedios/`, incluyendo `tablo
 
 ## Limitaciones y próximos pasos
 
-El análisis no identifica todavía la causa raíz de cada episodio. Los datos tienen series temporales irregulares y la Planta 2 requiere revisar individualmente los cuatro inversores con más pérdidas. Tampoco es posible determinar qué array, panel o módulo concreto origina un problema porque solo hay un sensor meteorológico por planta.
+El análisis no identifica todavía la causa raíz de cada episodio. Los datos tienen series temporales irregulares y la Planta 2 requiere revisar individualmente los cuatro inverters con más pérdidas. Tampoco es posible determinar qué array, panel o módulo concreto origina un problema porque solo hay un sensor meteorológico por planta.
 
-Como próximos pasos se recomienda contrastar las fechas problemáticas con registros operativos, investigar los inversores afectados de la Planta 2 y profundizar en la relación entre irradiación, potencia DC, potencia AC y eficiencia.
+Como próximos pasos se recomienda  investigar los inverters afectados de la Planta 2 y profundizar en la relación entre irradiación, potencia DC, potencia AC y eficiencia.
