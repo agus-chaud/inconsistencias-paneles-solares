@@ -1,0 +1,48 @@
+# Archivos del sistema
+desktop.ini
+Thumbs.db
+
+# Entornos
+.env
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# Jupyter
+.ipynb_checkpoints/
+.notebooks/
+
+# Datos
+datos/
+*.csv
+*.xlsx
+*.parquet
+*.feather
+*.db
+*.sqlite
+*.duckdb
+
+# Entregables
+entregables/
+reports/
+
+# Archivos de log
+*.log
+
+# Configuración de IDE
+.vscode/
+.idea/
+Como hacer presentaciones de negocio.pdf
+.github/copilot-instructions.md
+crear_estructura_ba.py
+docs/guia_inicio_proyecto.md
+DocumentosPlantasSolares/43602.pdf
+DocumentosPlantasSolares/bcg-mastering-scale-in-renewables-jun-2021.pdf
+DocumentosPlantasSolares/pwc-whitepaper-solar-revolution.pdf
+DocumentosPlantasSolares/solar-energy-industry-in-the-world-and-in-turkiye.pdf
+DocumentosPlantasSolares/Report_IEA-PVPS_T13-08_2017_Technical_Assumptions_Used_in_PV_Financial_Models.pdf
+DocumentosPlantasSolares/IEA-PVPS-T13-28-2024-REPORT-Technical-and-Economic-KPIs.pdf
+Presentacion entregable/Leer.txt.txt
+Notebooks/Leer.txt.txt
+Presentacion entregable/Analisis-de-Anomalias-en-Plantas-Solares-Fotovoltaicas.pptx
