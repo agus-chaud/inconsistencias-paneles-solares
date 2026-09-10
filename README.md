@@ -88,7 +88,6 @@ La eficiencia se calcula relacionando la potencia AC con la potencia DC. Cuando 
 │   ├── 01_ImportacionDatos.ipynb
 │   ├── 02_PreparacionVariables.ipynb
 │   └── 03_AnalisisInsights.ipynb
-├── Presentacion entregable/ # Presentación final
 ├── docs/
 │   ├── diccionario.md
 │   ├── guia_inicio_proyecto.md
